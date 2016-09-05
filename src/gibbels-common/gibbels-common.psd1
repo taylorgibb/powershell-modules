@@ -1,0 +1,29 @@
+@{
+ModuleToProcess = ''
+ModuleVersion = '1.0.3'
+GUID = '01aa873e-e21a-4f2f-a103-24904b2bfd5b'
+Author = 'Taylor Gibb'
+CompanyName = 'Developer Hut'
+Copyright = 'Taylor Gibb'
+Description = 'PowerShell module that houses a bunch of useful functions consumed by other modules.'
+PowerShellVersion = '5.0'
+PowerShellHostName = ''
+PowerShellHostVersion = ''
+DotNetFrameworkVersion = '4.0'
+CLRVersion = '4.0'
+ProcessorArchitecture = ''
+RequiredModules = @()
+RequiredAssemblies = @()
+ScriptsToProcess = @()
+TypesToProcess = @()
+FormatsToProcess = @()
+NestedModules = @(".\scripts\dotnet\Get-DotnetVersion.ps1")
+FunctionsToExport = 'Get-DotNetVersion'
+CmdletsToExport = '*'
+VariablesToExport = '*'
+AliasesToExport = '*'
+ModuleList = @()
+FileList = @()
+PrivateData = ''
+HelpInfoURI = 'www.taylorgibb.com'
+}
