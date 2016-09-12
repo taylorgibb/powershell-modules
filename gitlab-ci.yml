@@ -1,0 +1,9 @@
+stages:
+  - test
+pester:
+  stage: test
+  script:
+   - Invoke-Pester -EnableExit
+  tags:
+    - powershell
+    - pester

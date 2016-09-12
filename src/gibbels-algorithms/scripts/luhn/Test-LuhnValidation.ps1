@@ -1,47 +1,40 @@
+<#
+.SYNOPSIS
+ Checks whether a given Input was generated using the Luhn algorithm.
+
+.PARAMETER Number
+ The number you want to validate.
+
+.EXAMPLE
+ Test-LuhnValidation -Number "79927398712"
+#>
 function Test-LuhnValidation(){
-      [CmdletBinding()]
-    param([string]$Number)
-   
-    if(($Number.Length % 2) -ne 0)
-    {
-        $Number = $Number.Insert(0, 0)
-    }
     
-    $Length = $Number.Length
-    $Regex = "(\d)" * $Length
+    [CmdletBinding()]
+    param (
+
+        [string]$Number
+    )
     
-    if($Number -match $Regex)
-    {
-        $Sum = 0
-        $OrigMatches = $Matches
-    
-        for($i = 1; $i -lt $OrigMatches.Count; $i++)
-        {
-            if(($i % 2) -ne 0)
-            {
-                $digit = ([int]::Parse($OrigMatches[$i]) * 2)
-                if($digit.ToString() -match '(\d)(\d)')
-                {
-                   $digit = [int]::Parse($Matches[1]) + [int]::Parse($Matches[2])
-                }
-            }
-            else 
-            {
-                $digit = [int]::Parse($OrigMatches[$i])
-            }
-            $Sum += $digit
-        }
-        if(($Sum % 10) -eq 0)
-        {
-          return $True
-        }
-        else
-        {
-           return $False
-        }
+    if(!$($Number.Length % 2 -eq 0)){
+        $Number.Insert(0,0);  
     }
-    else
-    {
-        Write-Host "Please Check Your Input"
+
+    $sum = 0;
+    $alt = $true;
+    $temp = $Number.ToCharArray();
+    $numbers = @(0) * $Number.Length;
+
+    for($i = 0; $i -lt $numbers.Length; $i++){
+         $numbers[$i] = [int]::Parse($temp[$i])
+         if($alt){
+             $numbers[$i] *= 2
+             if($numbers[$i] -gt 9) { 
+                 $numbers[$i] -= 9 
+             }
+         }
+         $sum += $numbers[$i]
+         $alt = !$alt
     }
+    return ($sum % 10) -eq 0
 }
