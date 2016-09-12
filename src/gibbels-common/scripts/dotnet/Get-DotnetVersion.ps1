@@ -39,7 +39,7 @@ function Parse-DotNetVersionString {
   Get-DotNetVersion
 #>
 function Get-DotNetVersion {
-    [CmdletBinding()]
+
     $keys = Get-ChildItem -Path "HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP\"
     foreach($key in $keys) {
         $name = $key.Name.Split("\")[-1]

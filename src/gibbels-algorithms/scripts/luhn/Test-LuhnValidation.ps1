@@ -8,11 +8,10 @@
 .EXAMPLE
  Test-LuhnValidation -Number "79927398712"
 #>
-function Test-LuhnValidation(){
-    
-    [CmdletBinding()]
-    param (
+function Test-LuhnValidation {
 
+    param (
+        [Parameter(Mandatory=$True)]
         [string]$Number
     )
     
