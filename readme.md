@@ -26,3 +26,4 @@ Import-Module -Name "gibbels-algorithms" -Scope CurrentUser
 
 Supported cmdlets are:
 * Test-LuhnValidation
+* Test-LevenshteinDistance
