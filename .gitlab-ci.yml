@@ -1,9 +1,15 @@
 stages:
   - test
-pester:
+  - package
+Test:
   stage: test
   script:
    - Invoke-Pester -EnableExit
   tags:
     - powershell
     - pester
+Package:
+  stage: package
+  artifacts:
+   paths:
+    - src/*
