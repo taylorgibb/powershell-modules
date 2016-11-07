@@ -1,7 +1,7 @@
-stages:
+Stages:
   - test
   - package
-variables:
+Variables:
   GIT_SSL_NO_VERIFY: "true"
 Test:
   stage: test
