@@ -15,16 +15,11 @@ function Test-LuhnValidation {
         [string]$Number
     )
     
-    if(!$($Number.Length % 2 -eq 0)){
-        $Number.Insert(0,0);  
-    }
-
-    $sum = 0;
-    $alt = $true;
     $temp = $Number.ToCharArray();
     $numbers = @(0) * $Number.Length;
+    $alt = $false;
 
-    for($i = 0; $i -lt $numbers.Length; $i++){
+    for($i = $temp.Length -1; $i -ge 0; $i--) {
        $numbers[$i] = [int]::Parse($temp[$i])
        if($alt){
            $numbers[$i] *= 2
@@ -37,3 +32,4 @@ function Test-LuhnValidation {
     }
     return ($sum % 10) -eq 0
 }
+
