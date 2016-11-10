@@ -19,7 +19,6 @@ task Release -depends Test {
         Invoke-PSDeploy -Force 
     }
     catch {
-       Write-Host "Deploy failed"
        EXIT 1;
     }
 }
