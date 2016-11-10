@@ -2,7 +2,8 @@ properties {
     $scripts = "$PSScriptRoot\src\"
 }
 
-task default -depends Analyze, Test 
+task Check -depends Analyze, Test 
+task Release -depends Check 
 
 task Analyze {
      $result = Invoke-ScriptAnalyzer -Path $scripts -Severity @('Error', 'Warning') -Recurse
@@ -14,4 +15,8 @@ task Analyze {
 
 task Test {
     Invoke-Pester -Path $scripts -EnableExit
+}
+
+task Release {
+    Invoke-PSDeploy -Recurse
 }
