@@ -15,10 +15,13 @@ task Test -depends Analysis {
 }
 
 task Release -depends Test {
+    $code = 0;
     try {
         Invoke-PSDeploy -Force 
     }
     catch {
-       EXIT 1
+       $code = 1
     }
+
+    EXIT $code
 }
