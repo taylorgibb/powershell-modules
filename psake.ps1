@@ -2,7 +2,7 @@ properties {
     $scripts = "$PSScriptRoot\src\"
 }
 
-task Analyze {
+task Analysis {
      $result = Invoke-ScriptAnalyzer -Path $scripts -Severity @('Error', 'Warning') -Recurse
      if ($result) {
         $result | Format-Table  
@@ -10,15 +10,16 @@ task Analyze {
      }
 }
 
-task Test -depends Analyze {
+task Test -depends Analysis {
     Invoke-Pester -Path $scripts -EnableExit
 }
 
-task Release  {
+task Release -depends {
     try {
         Invoke-PSDeploy -Force 
     }
     catch {
+       Write-Host "Deploy failed"
        EXIT 1;
     }
 }
