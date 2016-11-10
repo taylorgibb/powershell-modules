@@ -24,7 +24,11 @@
   Sync-AzureFileStorage -Share "scripts" -LocalPath "C:\Users\taylorg\Desktop\sync\data" -StorageAccountName "developerhut" -StorageAccountKey "34ZM8+ixpJgoBk9PWZniGWowkOGfHKCtdrIOOPXfEDFGYu6Xx0c93F1AZCFLr9lQvaQX2z2DVCagOGS8qS59d3w=="
 #>
 function Sync-AzureFileStorage {
-
+    [CmdletBinding(
+        SupportsShouldProcess=$true,
+        ConfirmImpact="High"
+    )]
+    
     #Requires -Version 4
     param(
         [Parameter(Mandatory=$True)]
@@ -44,7 +48,7 @@ function Sync-AzureFileStorage {
     if($LocalFiles.Length -eq 0) {
       $RemoteFiles | Remove-AzureStorageFile -Confirm:$false
     }
-    elseif($RemoteFiles -eq $null) {
+    elseif($null -eq $RemoteFiles) {
         $LocalFiles | Set-AzureStorageFileContent -ShareName $Share -Context $Context
     }
     else{
@@ -52,20 +56,20 @@ function Sync-AzureFileStorage {
         foreach($Result in $Diff)
         {
             if($Result.SideIndicator -eq "=>"){
-                Write-Host "Deleting $($Result.InputObject)"
+                Write-Output "Deleting $($Result.InputObject)"
                 Remove-AzureStorageFile -ShareName $Share -Path $Result.InputObject -Context $Context -Confirm:$false
                 continue;
             }
         
             if($Result.SideIndicator -eq "<="){
-                 Write-Host "Uploading $($Result.InputObject)"
+                 Write-Output "Uploading $($Result.InputObject)"
                  Set-AzureStorageFileContent -ShareName $Share -Source $(Join-Path -Path $LocalPath -ChildPath $Result.InputObject) -Context $Context 
                  continue;
             }
     
             $LocalFileHash = Get-FileHash -Path $(Join-Path -Path $LocalPath -ChildPath $Result.InputObject) -Algorithm MD5
             $TempPath = [System.IO.Path]::GetTempFileName();
-            $RemoteFile = Get-AzureStorageFileContent -ShareName $Share -Path $Result.InputObject -Context $Context -Destination $TempPath -Confirm:$false
+            Get-AzureStorageFileContent -ShareName $Share -Path $Result.InputObject -Context $Context -Destination $TempPath -Confirm:$false
             $RemoteFileHash = Get-FileHash -Path $TempPath -Algorithm MD5
             if($LocalFileHash.Hash -ne $RemoteFileHash.Hash){
                 Remove-AzureStorageFile -ShareName $Share -Path $Result.InputObject -Context $Context -Confirm:$false

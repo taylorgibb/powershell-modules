@@ -1,12 +1,19 @@
 stages:
+  - analyze
   - test
   - package
 variables:
   GIT_SSL_NO_VERIFY: "true"
+Analyze:
+  stage: analyze
+  script:
+   - .\build.ps1 -Task "Analyze"
+  tags:
+    - powershell
 Test:
   stage: test
   script:
-   - Invoke-Pester -EnableExit
+   - .\build.ps1 -Task "Test"
   tags:
     - powershell
     - pester

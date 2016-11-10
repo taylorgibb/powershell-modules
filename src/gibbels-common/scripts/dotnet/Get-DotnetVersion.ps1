@@ -13,7 +13,7 @@ class DotNetVersion
     }
 }
 
-function Parse-DotNetVersionString {
+function Get-DotNetVersionString {
    
    param
    (
@@ -46,7 +46,7 @@ function Get-DotNetVersion {
         if($name -like "v*") {
            $version = $key.GetValue("Version", "");
            if($key.GetValue("Install", "") -eq "1"){
-            [DotNetVersion]::new($(Parse-DotNetVersionString $version), "N/A", [version]$version, $key.GetValue("SP", ""));
+            [DotNetVersion]::new($(Get-DotNetVersionString $version), "N/A", [version]$version, $key.GetValue("SP", ""));
            }
            if($version -ne ""){
             continue;
@@ -57,7 +57,7 @@ function Get-DotNetVersion {
              $version = $subkey.GetValue("Version", "")
              $servicePack = $subkey.GetValue("SP", "N/A")
              if($install -eq "1"){
-                [DotNetVersion]::new($(Parse-DotNetVersionString $version), $subkeyName, [version]$version, $servicePack);
+                [DotNetVersion]::new($(Get-DotNetVersionString $version), $subkeyName, [version]$version, $servicePack);
              }
            }
         }

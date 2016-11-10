@@ -19,9 +19,9 @@
   FormatsToProcess = @()
   NestedModules = @(".\scripts\luhn\Test-LuhnValidation.ps1", '.\scripts\levenshtein\Test-LevenshteinDistance.ps1')
   FunctionsToExport = @('Test-LuhnValidation', 'Test-LevenshteinDistance')
-  CmdletsToExport = '*'
-  VariablesToExport = '*'
-  AliasesToExport = '*'
+  CmdletsToExport = ''
+  VariablesToExport = ''
+  AliasesToExport = ''
   ModuleList = @()
   FileList = @()
   PrivateData = ''
