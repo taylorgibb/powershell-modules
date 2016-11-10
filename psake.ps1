@@ -14,13 +14,12 @@ task Test -depends Analyze {
     Invoke-Pester -Path $scripts -EnableExit
 }
 
-task Release -depends Test {
+task Release  {
     try {
         Invoke-PSDeploy -Force 
     }
     catch {
        Write-Error 'Deployment failed';
-       Throw $_;
        Exit 1;
     }
 }
