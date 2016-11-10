@@ -15,12 +15,10 @@ task Test -depends Analyze {
 }
 
 task Release  {
-    EXIT 1;
     try {
         Invoke-PSDeploy -Force 
     }
     catch {
-       Write-Error 'Deployment failed';
        EXIT 1;
     }
 }
