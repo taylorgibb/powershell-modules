@@ -2,7 +2,7 @@ param(
     [string[]]$Task = 'default'
 )
 
-Install-Module -Name PoweShellGet -Scope CurrentUser
+Install-Module -Name PowerShellGet -Scope CurrentUser
 
 if (!(Get-Module -Name psake -ListAvailable)) { 
     Install-Module -Name psake -Scope CurrentUser 
