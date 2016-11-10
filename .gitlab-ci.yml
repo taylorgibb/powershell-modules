@@ -1,12 +1,12 @@
 stages:
-  - check
+  - test
   - release
 variables:
   GIT_SSL_NO_VERIFY: "true"
 Check:
   stage: check
   script:
-   - .\build.ps1 -Task "Check"
+   - .\build.ps1 -Task "Test"
   except:
    - master
   tags:
