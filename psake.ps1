@@ -19,6 +19,7 @@ task Release -depends Test {
         Invoke-PSDeploy -Force 
     }
     catch {
-       EXIT 1;
+       Throw $_
+       EXIT 1
     }
 }
