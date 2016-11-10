@@ -13,5 +13,5 @@ task Analyze {
 }
 
 task Test {
-    Invoke-Pester -Path $scripts -PassThru -EnableExit
+    Invoke-Pester -Path $scripts -EnableExit
 }
