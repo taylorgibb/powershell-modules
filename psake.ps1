@@ -19,6 +19,7 @@ task Release {
         Invoke-PSDeploy -Force 
     }
     catch {
-       exec { cmd /c exit (1) }
+       Write-Output "Deployment Failed"
+       EXIT 1
     }
 }
