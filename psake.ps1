@@ -19,7 +19,7 @@ task Release {
         Invoke-PSDeploy -Force 
     }
     catch {
-       Write-Output "Deployment Failed: " +  $_.Exception.Message
+       Write-Output $_.Exception.Message
        EXIT 1
     }
 }
