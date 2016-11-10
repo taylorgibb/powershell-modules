@@ -14,7 +14,7 @@ task Test -depends Analysis {
     Invoke-Pester -Path $scripts -EnableExit
 }
 
-task Release -depends {
+task Release {
     try {
         Invoke-PSDeploy -Force 
     }
