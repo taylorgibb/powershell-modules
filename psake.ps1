@@ -15,9 +15,12 @@ task Test -depends Analyze {
 }
 
 task Release -depends Test {
-    $errors = @();
-    Invoke-PSDeploy -Force -ErrorAction Stop -ErrorVariable +errors
-    if($errors) {
-        Write-Error -Message 'Deployment failed'
+    try {
+        Invoke-PSDeploy -Force 
+    }
+    catch {
+       Write-Error 'Deployment failed';
+       Throw $_;
+       Exit 1;
     }
 }
