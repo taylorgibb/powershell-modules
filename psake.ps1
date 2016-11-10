@@ -15,5 +15,9 @@ task Test -depends Analyze {
 }
 
 task Release -depends Test {
-    Invoke-PSDeploy -Confirm:$False -Force
+    $errors = @();
+    Invoke-PSDeploy -Force -ErrorAction Stop -ErrorVariable +errors
+    if($errors) {
+        Write-Error -Message 'Deployment failed'
+    }
 }
