@@ -15,5 +15,5 @@ task Test -depends Analyze {
 }
 
 task Release -depends Test {
-    Invoke-PSDeploy
+    Invoke-PSDeploy -Force
 }
