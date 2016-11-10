@@ -2,6 +2,7 @@ param(
     [string[]]$Task = 'default'
 )
 
+$env:NugetApiKey
 $policy = Get-PSRepository -Name "PSGallery" | Select-Object -ExpandProperty "InstallationPolicy"
 if($policy -ne "Trusted") {
     Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
