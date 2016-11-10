@@ -20,6 +20,7 @@ task Release {
     }
     catch {
        Write-Output "Deployment Failed"
+       Throw $_
        EXIT 1
     }
 }
