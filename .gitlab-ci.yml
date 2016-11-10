@@ -4,7 +4,7 @@ stages:
 variables:
   GIT_SSL_NO_VERIFY: "true"
 Check:
-  stage: check
+  stage: test
   script:
    - .\build.ps1 -Task "Test"
   except:
