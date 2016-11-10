@@ -2,7 +2,10 @@ param(
     [string[]]$Task = 'default'
 )
 
-Install-Module -Name PowerShellGet -Scope CurrentUser
+$policy = Get-PSRepository -Name "PSGallery" | Select-Object -ExpandProperty "InstallationPolicy"
+if($policy -ne "Trusted") {
+    Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
+}
 
 if (!(Get-Module -Name psake -ListAvailable)) { 
     Install-Module -Name psake -Scope CurrentUser 
