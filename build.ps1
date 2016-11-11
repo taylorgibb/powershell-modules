@@ -31,7 +31,6 @@ function Analyze-Scripts
     param(
         [string]$Path = "$PSScriptRoot\src\"
     )
-    Write-Output "Analyzing Scripts..."
     $result = Invoke-ScriptAnalyzer -Path $Path -Severity @('Error', 'Warning') -Recurse
     if ($result) {
        $result | Format-Table  
@@ -45,20 +44,14 @@ function Run-Tests
     param(
         [string]$Path = "$PSScriptRoot\src\"
     )
-    Write-Output "Running Pester Tests..."
+     
     Invoke-Pester -Path $Path -Quiet
 }
 
 function Deploy-Modules
 {
     try {
-       if($(Get-GitCommitMessage) -like "[deploy]") {
-          Write-Output "Deploying Modules..."
-          Invoke-PSDeploy -Force 
-       }
-       else {
-          Write-Output "Skipping Deploy..."
-       }
+       Invoke-PSDeploy -Force 
     }
     catch {
        Write-Output $_.Exception.Message
@@ -77,13 +70,21 @@ foreach($task in $Tasks){
     switch($task)
     {
         "analyze" {
+            Write-Output "Analyzing Scripts..."
             Analyze-Scripts
         }
         "test" {
+            Write-Output "Running Pester Tests..."
             Run-Tests
         }
         "release" {
-            Deploy-Modules
+            if($(Get-GitCommitMessage) -like "*[deploy]*") {
+                Write-Output "Deploying Modules..."
+                Deploy-Modules
+            }
+            else {
+                Write-Output "Skipping Deploy..."
+            }
         }
     }
 }
