@@ -34,7 +34,7 @@ function Analyze-Scripts
     $result = Invoke-ScriptAnalyzer -Path $Path -Severity @('Error', 'Warning') -Recurse
     if ($result) {
        $result | Format-Table  
-       Write-Error -Message 'One or more Script Analyzer errors or warnings were found.'   
+       Write-Error -Message "$($result.SuggestedCorrections.Count) linting errors or warnings were found. The build cannot continue."
        EXIT 1     
     }
 }
@@ -42,10 +42,14 @@ function Analyze-Scripts
 function Run-Tests
 {
     param(
-        [string]$Path = "$PSScriptRoot\src\"
+        [string]$Path = "$PSScriptRoot\src"
     )
      
-    Invoke-Pester -Path $Path -Quiet
+    $results = Invoke-Pester -Path $Path -PassThru -Quiet
+    if($results.FailedCount -gt 0) {
+       Write-Output "$($results.FailedCount) tests failed. The build cannot continue."
+       EXIT 1
+    }
 }
 
 function Deploy-Modules
