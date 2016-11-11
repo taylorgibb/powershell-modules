@@ -5,7 +5,7 @@ variables:
 Release:
   stage: release
   script:
-   - .\build.ps1 -Tasks "'analyze','test','release''"
+   - .\build.ps1 -Tasks 'analyze','test','release'
   only:
     - master
   tags:
