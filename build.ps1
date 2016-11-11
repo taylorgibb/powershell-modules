@@ -84,7 +84,8 @@ foreach($task in $Tasks){
             Run-Tests
         }
         "release" {
-            if($(Get-GitCommitMessage) -like "*[deploy]*") {
+            $message = Get-GitCommitMessage
+            if($message.ToLower().Contains("[deploy]")) {
                 Write-Output "Deploying Modules..."
                 Deploy-Modules
             }
