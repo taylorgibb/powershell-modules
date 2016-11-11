@@ -11,7 +11,7 @@ Analyze:
   tags:
     - powershell
 Test:
-  stage: Test
+  stage: test
   script:
    - .\build.ps1 -Task "Test"
   tags:
