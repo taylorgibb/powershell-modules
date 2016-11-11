@@ -1,6 +1,6 @@
 @{
   ModuleToProcess = ''
-  ModuleVersion = '1.0.2'
+  ModuleVersion = '1.0.3'
   GUID = '01aa873e-e21a-4f2f-a103-24904b2bfd5e'
   Author = 'Taylor Gibb'
   CompanyName = 'Developer Hut'
