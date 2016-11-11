@@ -62,7 +62,7 @@ function Deploy-Modules
     }
     catch {
        Write-Output $_.Exception.Message
-      # EXIT 1
+       EXIT 1
     }
 }
 
