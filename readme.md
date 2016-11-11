@@ -1,5 +1,6 @@
-## Build Status
+## Build
 [![build status](https://gitlab.com/taylorgibb/powershell-modules/badges/master/build.svg)](https://gitlab.com/taylorgibb/powershell-modules/commits/master)
+[![build coverage](https://gitlab.com/taylorgibb/powershell-modules/badges/master/coverage.svg)](https://gitlab.com/taylorgibb/powershell-modules/commits/master)
 
 ## Modules
 * gibbels-common
