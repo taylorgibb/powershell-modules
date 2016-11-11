@@ -10,11 +10,11 @@ task Analysis {
      }
 }
 
-task Test -depends Analysis {
+task Test {
     Invoke-Pester -Path $scripts -EnableExit
 }
 
-task Release -depends Test {
+task Release {
     try {
         Invoke-PSDeploy -Force 
     }

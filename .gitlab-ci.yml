@@ -1,14 +1,19 @@
 stages:
+  - analyze
   - test
   - release
 variables:
   GIT_SSL_NO_VERIFY: "true"
-Check:
-  stage: test
+Analyze:
+  stage: analyze
+  script:
+   - .\build.ps1 -Task "Analysis"
+  tags:
+    - powershell
+Test:
+  stage: Test
   script:
    - .\build.ps1 -Task "Test"
-  except:
-   - master
   tags:
     - powershell
 Release:
