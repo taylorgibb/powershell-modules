@@ -45,11 +45,13 @@ function Run-Tests
         [string]$Path = "$PSScriptRoot\src"
     )
      
-    $results = Invoke-Pester -Path $Path -PassThru -Quiet
+    $results = Invoke-Pester -Path $Path -CodeCoverage $Path\*\*\*\*.ps1 -PassThru -Quiet
     if($results.FailedCount -gt 0) {
        Write-Output "$($results.FailedCount) tests failed. The build cannot continue."
        EXIT 1
     }
+    $coverage = [math]::Round($(100 - (($results.CodeCoverage.NumberOfCommandsMissed / $results.CodeCoverage.NumberOfCommandsAnalyzed) * 100)), 2);
+    Write-Output "Code Coverage: $coverage%"
 }
 
 function Deploy-Modules
