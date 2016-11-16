@@ -2,38 +2,15 @@ param(
     [string[]]$Tasks
 )
 
-foreach($task in $Tasks){
-    switch($task)
-    {
-        "analyze" {
-            Install-Dependency -Name "PSScriptAnalyzer"
-            Write-Output "Analyzing Scripts..."
-            Analyze-Scripts
-        }
-        "test" {
-            Install-Dependency -Name "Pester"
-            Write-Output "Running Pester Tests..."
-            Run-Tests
-        }
-        "release" {
-            $message = Get-GitCommitMessage
-            if($message.ToLower().Contains("[deploy]")) {
-                Install-Dependency -Name "PSDeploy"
-                Write-Output "Deploying Modules..."
-                Deploy-Modules
-            }
-            else {
-                Write-Output "Skipping Deploy..."
-            }
-        }
-    }
-}
-
 function Install-Dependency([string] $Name)
 {
     $policy = Get-PSRepository -Name "PSGallery" | Select-Object -ExpandProperty "InstallationPolicy"
     if($policy -ne "Trusted") {
         Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
+    }
+
+    if (!(Get-Module -Name $Name -ListAvailable)) { 
+        Install-Module -Name $Name -Scope CurrentUser 
     }
 }
 
@@ -80,3 +57,31 @@ function Get-GitCommitMessage
 {
     git log -1 --pretty=%B
 }
+
+foreach($task in $Tasks){
+    switch($task)
+    {
+        "analyze" {
+            Install-Dependency -Name "PSScriptAnalyzer"
+            Write-Output "Analyzing Scripts..."
+            Analyze-Scripts
+        }
+        "test" {
+            Install-Dependency -Name "Pester"
+            Write-Output "Running Pester Tests..."
+            Run-Tests
+        }
+        "release" {
+            $message = Get-GitCommitMessage
+            if($message.ToLower().Contains("[deploy]")) {
+                Install-Dependency -Name "PSDeploy"
+                Write-Output "Deploying Modules..."
+                Deploy-Modules
+            }
+            else {
+                Write-Output "Skipping Deploy..."
+            }
+        }
+    }
+}
+
