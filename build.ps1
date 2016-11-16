@@ -48,8 +48,19 @@ function Run-Tests
 
 function Deploy-Modules
 {
+    param(
+        [string]$Path = "$PSScriptRoot\src"
+    )
+
     try {
-       Invoke-PSDeploy -Force 
+       foreach($module in $(Get-ChildItem -Path $Path | Where-Object {$_.Name.ToLower().Contains("psdeploy")})){
+         $name = $module.Name.Split(".")[0]
+         $localManifest = Import-PowerShellDataFile -Path $(Join-Path -Path $module.DirectoryName -ChildPath "$name\$name.psd1")
+         if($localManifest.ModuleVersion -gt $(Find-Module -Name $name).Version) {
+             Write-Output "  > Deploying $name"
+             Invoke-PSDeploy -Path $module.FullName -Force 
+         }
+       }
     }
     catch {
        Write-Output $_.Exception.Message
