@@ -35,11 +35,15 @@ function Run-Tests
      
     $results = Invoke-Pester -Path $Path -CodeCoverage $Path\*\*\*\*.ps1 -PassThru -Quiet
     if($results.FailedCount -gt 0) {
-       Write-Output "$($results.FailedCount) tests failed. The build cannot continue."
+       Write-Output "  > $($results.FailedCount) tests failed. The build cannot continue."
+       foreach($result in $($results.TestResult | Where {$_.Passed -eq $false} | Select-Object -Property Describe,Context,Name,Passed,Time)){
+            Write-Output "    > $result"
+       }
+
        EXIT 1
     }
     $coverage = [math]::Round($(100 - (($results.CodeCoverage.NumberOfCommandsMissed / $results.CodeCoverage.NumberOfCommandsAnalyzed) * 100)), 2);
-    Write-Output "Code Coverage: $coverage%"
+    Write-Output "  > Code Coverage: $coverage%"
 }
 
 function Deploy-Modules
