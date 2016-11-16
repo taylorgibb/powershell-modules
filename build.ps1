@@ -2,27 +2,38 @@ param(
     [string[]]$Tasks
 )
 
-function Install-Dependencies
+foreach($task in $Tasks){
+    switch($task)
+    {
+        "analyze" {
+            Install-Dependency -Name "PSScriptAnalyzer"
+            Write-Output "Analyzing Scripts..."
+            Analyze-Scripts
+        }
+        "test" {
+            Install-Dependency -Name "Pester"
+            Write-Output "Running Pester Tests..."
+            Run-Tests
+        }
+        "release" {
+            $message = Get-GitCommitMessage
+            if($message.ToLower().Contains("[deploy]")) {
+                Install-Dependency -Name "PSDeploy"
+                Write-Output "Deploying Modules..."
+                Deploy-Modules
+            }
+            else {
+                Write-Output "Skipping Deploy..."
+            }
+        }
+    }
+}
+
+function Install-Dependency([string] $Name)
 {
     $policy = Get-PSRepository -Name "PSGallery" | Select-Object -ExpandProperty "InstallationPolicy"
     if($policy -ne "Trusted") {
         Set-PSRepository -Name "PSGallery" -InstallationPolicy Trusted
-    }
-    
-    if (!(Get-Module -Name psake -ListAvailable)) { 
-        Install-Module -Name psake -Scope CurrentUser 
-    }
-    
-    if (!(Get-Module -Name PSScriptAnalyzer -ListAvailable)) { 
-        Install-Module -Name PSScriptAnalyzer -Scope CurrentUser 
-    }
-    
-    if (!(Get-Module -Name Pester -ListAvailable)) { 
-        Install-Module -Name Pester -Scope CurrentUser 
-    }
-    
-    if (!(Get-Module -Name PSDeploy -ListAvailable)) { 
-        Install-Module -Name PSDeploy -Scope CurrentUser 
     }
 }
 
@@ -68,30 +79,4 @@ function Deploy-Modules
 function Get-GitCommitMessage
 {
     git log -1 --pretty=%B
-}
-
-Install-Dependencies
-
-foreach($task in $Tasks){
-    switch($task)
-    {
-        "analyze" {
-            Write-Output "Analyzing Scripts..."
-            Analyze-Scripts
-        }
-        "test" {
-            Write-Output "Running Pester Tests..."
-            Run-Tests
-        }
-        "release" {
-            $message = Get-GitCommitMessage
-            if($message.ToLower().Contains("[deploy]")) {
-                Write-Output "Deploying Modules..."
-                Deploy-Modules
-            }
-            else {
-                Write-Output "Skipping Deploy..."
-            }
-        }
-    }
 }
