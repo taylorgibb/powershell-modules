@@ -88,7 +88,7 @@ foreach($task in $Tasks){
         }
         "release" {
             $message = Get-GitCommitMessage
-            if($message.Trim().ToLower().Contains("[deploy]")) {
+            if($message.ToLower().Contains("[deploy]")) {
                 Install-Dependency -Name "PSDeploy"
                 Write-Output "Deploying Modules..."
                 Deploy-Modules
