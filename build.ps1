@@ -68,11 +68,6 @@ function Deploy-Modules
     }
 }
 
-function Get-GitCommitMessage
-{
-    git log -1 --pretty=%B
-}
-
 foreach($task in $Tasks){
     switch($task)
     {
@@ -87,15 +82,9 @@ foreach($task in $Tasks){
             Run-Tests
         }
         "release" {
-            $message = Get-GitCommitMessage
-            if($message.ToLower().Contains("[deploy]")) {
-                Install-Dependency -Name "PSDeploy"
-                Write-Output "Deploying Modules..."
-                Deploy-Modules
-            }
-            else {
-                Write-Output "Skipping Deploy..."
-            }
+            Install-Dependency -Name "PSDeploy"
+            Write-Output "Deploying Modules..."
+            Deploy-Modules
         }
     }
 }
