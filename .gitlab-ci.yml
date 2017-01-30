@@ -19,6 +19,7 @@ test:
     - powershell
 release:
   stage: release
+  script: ls
   artifacts:
     paths:
     - src
