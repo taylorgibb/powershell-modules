@@ -35,17 +35,32 @@ function Run-Tests
      
     $results = Invoke-Pester -Path $Path -CodeCoverage $Path\*\*\*\*.ps1 -PassThru -Quiet
     if($results.FailedCount -gt 0) {
-       Write-Output "$($results.FailedCount) tests failed. The build cannot continue."
+       Write-Output "  > $($results.FailedCount) tests failed. The build cannot continue."
+       foreach($result in $($results.TestResult | Where {$_.Passed -eq $false} | Select-Object -Property Describe,Context,Name,Passed,Time)){
+            Write-Output "    > $result"
+       }
+
        EXIT 1
     }
     $coverage = [math]::Round($(100 - (($results.CodeCoverage.NumberOfCommandsMissed / $results.CodeCoverage.NumberOfCommandsAnalyzed) * 100)), 2);
-    Write-Output "Code Coverage: $coverage%"
+    Write-Output "  > Code Coverage: $coverage%"
 }
 
 function Deploy-Modules
 {
+    param(
+        [string]$Path = "$PSScriptRoot\src"
+    )
+
     try {
-       Invoke-PSDeploy -Force 
+       foreach($module in $(Get-ChildItem -Path $Path | Where-Object {$_.Name.ToLower().Contains("psdeploy")})){
+         $name = $module.Name.Split(".")[0]
+         $localManifest = Import-PowerShellDataFile -Path $(Join-Path -Path $module.DirectoryName -ChildPath "$name\$name.psd1")
+         if($localManifest.ModuleVersion -gt $(Find-Module -Name $name).Version) {
+             Write-Output "  > Deploying $name"
+             Invoke-PSDeploy -Path $module.FullName -Force 
+         }
+       }
     }
     catch {
        Write-Output $_.Exception.Message
