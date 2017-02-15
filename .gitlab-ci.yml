@@ -20,7 +20,7 @@ deploy:
   stage: deploy
   when: manual
   script:
-   - .\build.ps1 -Tasks 'release'
+   - .\build.ps1 -Tasks 'deploy'
   only:
     - master
   tags:
