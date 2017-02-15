@@ -1,7 +1,6 @@
 stages:
   - analyze
   - test
-  - release
   - deploy
 variables:
   GIT_SSL_NO_VERIFY: "true"
@@ -17,20 +16,13 @@ test:
    - .\build.ps1 -Tasks 'test'
   tags:
     - powershell
-release:
-  stage: release
-  script: ls
-  artifacts:
-    paths:
-    - src
-  tags:
-    - powershell    
 deploy:
   stage: deploy
+  when: manual
   script:
    - .\build.ps1 -Tasks 'release'
   only:
     - master
   tags:
     - powershell
-  when: manual
+  
