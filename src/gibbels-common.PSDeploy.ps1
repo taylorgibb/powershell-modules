@@ -1,6 +1,6 @@
 Deploy gibbels-algorithms {
     By PSGalleryModule {
-        FromSource gibbels-algorithms
+        FromSource gibbels-common
         To PSGallery
         WithOptions @{
             ApiKey = $ENV:NugetApiKey
